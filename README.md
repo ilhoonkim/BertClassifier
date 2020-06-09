@@ -9,7 +9,7 @@ input으로 넣는 텍스트의 양식이나 혹은 예측하려는 값에 따�
 
 
 **BERT FINE TUNNING TASK**
-![Uploading 그림4-bert-experiment-result.png…]()
+![그림4-bert-experiment-result](https://user-images.githubusercontent.com/45644085/84091910-d6f8c080-aa30-11ea-8098-a7c9a598d79f.png)
 
 |TASK명|수행|
 |---|:---:|
