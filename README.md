@@ -5,7 +5,8 @@ Google에서 제공하는 NLP 모델인 BERT를 통해 한글어 자연어 처�
 BERT는 트랜스포머로 인코딩하여 학습한 사전학습 모델이라고 생각합니다.   
 전이학습의 경우는 완성된 사전학습 모델 위에 FC layer를 한층 더 만들어 텍스트를 넣고 결과값을 예측하게 합니다.   
 input으로 넣는 텍스트의 양식이나 혹은 예측하려는 값에 따라서 BERT Fine-tunning의 TASK가 달라지는 것입니다.  
-![파인튜닝 원리](https://user-images.githubusercontent.com/45644085/84963416-4878f300-b144-11ea-8b47-abfb0930a89d.JPG)
+![파인튜닝 원리](https://user-images.githubusercontent.com/45644085/84963416-4878f300-b144-11ea-8b47-abfb0930a89d.JPG)   
+
 버트 모델은 파인튜닝 시에 FC(fully connected) 레이어를 하나 추가해주는 간단한 방식을 취하고 있습니다.
 
 
