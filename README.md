@@ -186,3 +186,6 @@ run_classifier.py의 예측 부분은 test.tsv 파일을 읽어와서 각각 예
             print(f'{type(e).__name__}: {" ".join(list(e.args))}')
 
 ```
+실제로 --do_predict=True로 주고 문장을 넣어서 학습한 모델을 테스트해 본 결과입니다.   
+모델은  8만 스텝 정도 학습하였습니다.   
+![프리딕트결과](https://user-images.githubusercontent.com/45644085/84995858-77fd1f00-b187-11ea-8753-3e56b50510d6.png)
