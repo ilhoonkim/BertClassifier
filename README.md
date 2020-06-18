@@ -135,4 +135,25 @@ df = pd.DataFrame(data = nsmc_total, columns=["sentence"])
 df['label'] = label_list
 ```
 ## 2.학습하기
-보통 train 하기위해서는 검증셋(dev.tsv) 테스트셋(test.tsv)를 모두 준비해야 되나 그건 생략하고 일단 학습셋을 복사해서 명칭만 바꾸어서 사용하겠습니다.
+보통 train 하기위해서는 검증셋(dev.tsv) 테스트셋(test.tsv)를 모두 준비해야 되나 그건 생략하고 일단 학습셋을 복사해서 명칭만 바꾸어서 사용하겠습니다. 
+제 사전학습 모델을 공개하기는 어려워 우선 전이학습의 경우는 BERT-Base, Multilingual Cased 모델을 사용하였습니다.
+```
+  python run_classifier.py \
+  --task_name=sst2 \
+  --do_train=true \
+  --do_eval=true \
+  --data_dir=$BERT_BASE/data/nsmc \
+  --vocab_file=$BERT_BASE/pretrained_models/multi_cased_L-12_H-768_A-12/vocab.txt \
+  --bert_config_file=$BERT_BASE/pretrained_models/multi_cased_L-12_H-768_A-12/bert_config.json \
+  --max_seq_length=128 \
+  --train_batch_size=16 \
+  --learning_rate=1e-5 \
+  --init_checkpoint=$BERT_BASE/pretrained_models/multi_cased_L-12_H-768_A-12/bert_model.ckpt \
+  --num_train_epochs=10000.0 \
+  --output_dir=$BERT_BASE/finetuning_models/nsmc_class_output
+
+```
+![클래시파이어학습](https://user-images.githubusercontent.com/45644085/84970043-df4dab80-b154-11ea-9859-bfe9d4a129f4.JPG)   
+이렇게 학습이 진행됩니다. 
+
+loss가 로깅되는 이유는 [BERT 사전학습 관련 깃헙](https://github.com/ilhoonkim/BertPre-training#%EC%82%AC%EC%A0%84%ED%95%99%EC%8A%B5-%ED%95%98%EA%B8%B0)을 참조하시길 바랍니다.
