@@ -34,4 +34,37 @@ BERT Fine-Tunning의 TASK는 목적에 따라 다음과 같이 존재합니다.
 잘 생각해보면 TASK는 이미 정해진 데이터로 그러한 학습을 수행하였을 뿐이고 저는 단일 문장이 들어오면 해당 문장의 의도를 구분하고 싶었습니다.
 그래서 SST-2의 라벨을 바이너리가 아니라 여러개로 하여 학습해보기로 했습니다.
 
+## 1. 데이터 만들기
+우선 기존에 nsmc 데이터에서 일부만 간단하게 분류해보고 싶었습니다.   
+그래서 영화 리뷰 데이터를 어떻게 분류할까하다 리뷰 내용에 대해 분류해보기로 했습니다.   
+nsmc 데이터를 한번 쭉 보니 크게 1.연기력 2.스토리/구성 3.메세지/의미 4.영상미 5.영화음악 6.역사/현실고증 정도로 리뷰를 분류할 수 있을 것 같았습니다. 그래서 해당 분류에 들어갈만한 키워드를 구성하여 정규식을 통해 검출하여 각각 리스트에 담아보았습니다.
 
+```
+actor = re.compile('연기력')
+story = re.compile('스토리|각본|구성|소재')
+message = re.compile('메시지|메세지|의미')
+sound = re.compile('음악|bgm')
+scene = re.compile('영상미|촬영기법')
+history = re.compile('고증|왜곡|역사적 사실|역사적 배경|사료')
+
+연기력_list = []
+스토리_list = []
+메세지_list = []
+영상미_list = []
+음악_list = []
+고증_list = []
+
+for i in tqdm_notebook(nsmc_data["review"]):
+    if actor.search(i):
+        연기력_list.append(i)
+    if story.search(i):
+        스토리_list.append(i)
+    if message.search(i):
+        메세지_list.append(i)
+    if scene.search(i):
+        영상미_list.append(i)  
+    if sound.search(i):
+        음악_list.append(i)            
+    if history.search(i):
+        고증_list.append(i)  
+```
