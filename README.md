@@ -173,32 +173,10 @@ run_classifier.py의 예측 부분은 test.tsv 파일을 읽어와서 각각 예
                   InputExample(guid=guid, text_a=text_a, label=label))
 
             num_actual_predict_examples = len(predict_examples)
-            if FLAGS.use_tpu:
-              # TPU requires a fixed batch size for all batches, therefore the number
-              # of examples must be a multiple of the batch size, or else examples
-              # will get dropped. So we pad with fake examples which are ignored
-              # later on.
-              while len(predict_examples) % FLAGS.predict_batch_size != 0:
-                predict_examples.append(PaddingInputExample())
-
-            predict_file = os.path.join(FLAGS.output_dir, "predict.tf_record")
-            file_based_convert_examples_to_features(predict_examples, label_list,
-                                                    FLAGS.max_seq_length, tokenizer,
-                                                    predict_file)
-
-            tf.logging.info("***** Running prediction*****")
-            tf.logging.info("  Num examples = %d (%d actual, %d padding)",
-                            len(predict_examples), num_actual_predict_examples,
-                            len(predict_examples) - num_actual_predict_examples)
-            tf.logging.info("  Batch size = %d", FLAGS.predict_batch_size)
-
-            predict_drop_remainder = True if FLAGS.use_tpu else False
-            predict_input_fn = file_based_input_fn_builder(
-                input_file=predict_file,
-                seq_length=FLAGS.max_seq_length,
-                is_training=False,
-                drop_remainder=predict_drop_remainder)
-
+            ...
+            ...
+            ...
+            ...
             result = estimator.predict(input_fn=predict_input_fn)
 
             for (i, prediction) in enumerate(result):
