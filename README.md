@@ -156,4 +156,55 @@ df['label'] = label_list
 ![클래시파이어학습](https://user-images.githubusercontent.com/45644085/84970043-df4dab80-b154-11ea-9859-bfe9d4a129f4.JPG)   
 이렇게 학습이 진행됩니다. 
 
-loss가 로깅되는 이유는 [BERT 사전학습 관련 깃헙](https://github.com/ilhoonkim/BertPre-training#%EC%82%AC%EC%A0%84%ED%95%99%EC%8A%B5-%ED%95%98%EA%B8%B0)을 참조하시길 바랍니다.
+loss가 로깅되는 이유는 [BERT 사전학습 관련 깃헙](https://github.com/ilhoonkim/BertPre-training#%EC%82%AC%EC%A0%84%ED%95%99%EC%8A%B5-%ED%95%98%EA%B8%B0)을 참조하시길 바랍니다.   
+## 3. 예측하기(결과 확인하기)
+run_classifier.py의 예측 부분은 test.tsv 파일을 읽어와서 각각 예측하여  정확도를 계산하는 것인데요.   
+실제로 만들어진 모델을 즉각적으로 한 문장씩 테스트해보기 위해서 수정을 하였습니다.   
+```
+ if FLAGS.do_predict:
+    while True:
+        try:
+            test_sentence = input('input sentence: ') # 쉘에서 바로 입력한 문장을 test_example로 만든다.
+            predict_examples = []
+            guid = "test-1"
+            label = "연기력"
+            text_a = tokenization.convert_to_unicode(str(test_sentence))
+            predict_examples.append(
+                  InputExample(guid=guid, text_a=text_a, label=label))
+
+            num_actual_predict_examples = len(predict_examples)
+            if FLAGS.use_tpu:
+              # TPU requires a fixed batch size for all batches, therefore the number
+              # of examples must be a multiple of the batch size, or else examples
+              # will get dropped. So we pad with fake examples which are ignored
+              # later on.
+              while len(predict_examples) % FLAGS.predict_batch_size != 0:
+                predict_examples.append(PaddingInputExample())
+
+            predict_file = os.path.join(FLAGS.output_dir, "predict.tf_record")
+            file_based_convert_examples_to_features(predict_examples, label_list,
+                                                    FLAGS.max_seq_length, tokenizer,
+                                                    predict_file)
+
+            tf.logging.info("***** Running prediction*****")
+            tf.logging.info("  Num examples = %d (%d actual, %d padding)",
+                            len(predict_examples), num_actual_predict_examples,
+                            len(predict_examples) - num_actual_predict_examples)
+            tf.logging.info("  Batch size = %d", FLAGS.predict_batch_size)
+
+            predict_drop_remainder = True if FLAGS.use_tpu else False
+            predict_input_fn = file_based_input_fn_builder(
+                input_file=predict_file,
+                seq_length=FLAGS.max_seq_length,
+                is_training=False,
+                drop_remainder=predict_drop_remainder)
+
+            result = estimator.predict(input_fn=predict_input_fn)
+
+            for (i, prediction) in enumerate(result):
+                label = prediction["probabilities"].tolist().index(max(prediction["probabilities"]))
+                print(f'CATEGORY: {label_list[label]}    확률 :{prediction["probabilities"].tolist()[label]}') # 예측 결과를 바로 프린트해주기
+        except Exception as e:
+            print(f'{type(e).__name__}: {" ".join(list(e.args))}')
+
+```
