@@ -99,3 +99,38 @@ for i in tqdm_notebook(nsmc_data["review"]):
 1816
 234
 ```
+
+이렇게 하여 최종 학습셋이 만들어졌습니다. 총 1200개의 데이터이며 6개의 분류 라벨을 가지며 각 라벨마다 200개씩 데이터가 준비되었습니다.
+```
+nsmc_total = []
+for i in 연기력_list[:200]:
+    nsmc_total.append(i)
+for i in 스토리_list[:200]:
+    nsmc_total.append(i)
+for i in 메세지_list[:200]:
+    nsmc_total.append(i)
+for i in 영상미_list[:200]:
+    nsmc_total.append(i)
+for i in 음악_list[:200]:
+    nsmc_total.append(i)
+for i in 고증_list[:200]:
+    nsmc_total.append(i)
+
+label_list = []
+for i in range(200):
+    label_list.append('연기력')
+for i in range(200):
+    label_list.append('스토리/구성')
+for i in range(200):
+    label_list.append('메세지/의미')
+for i in range(200):
+    label_list.append('영상미')
+for i in range(200):
+    label_list.append('영화음악')
+for i in range(200):
+    label_list.append('역사/현실고증')
+
+
+df = pd.DataFrame(data = nsmc_total, columns=["sentence"])
+df['label'] = label_list
+```
