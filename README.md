@@ -40,6 +40,12 @@ BERT Fine-Tunning의 TASK는 목적에 따라 다음과 같이 존재합니다.
 nsmc 데이터를 한번 쭉 보니 크게 1.연기력 2.스토리/구성 3.메세지/의미 4.영상미 5.영화음악 6.역사/현실고증 정도로 리뷰를 분류할 수 있을 것 같았습니다. 그래서 해당 분류에 들어갈만한 키워드를 구성하여 정규식을 통해 검출하여 각각 리스트에 담아보았습니다.
 
 ```
+import re
+import pandas as pd
+
+nsmc_data = pd.read_csv("nsmc_corpus.txt", sep="delimeter", header = None)
+nsmc_data["review"] = nsmc_data
+
 actor = re.compile('연기력')
 story = re.compile('스토리|각본|구성|소재')
 message = re.compile('메시지|메세지|의미')
